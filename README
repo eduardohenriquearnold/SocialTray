@@ -1,0 +1,16 @@
+Social Tray
+Version 2.0
+
+Author: Eduardo Henrique Arnold
+Last update: 26 Dec 2013
+
+The main objective of this software is to allow the user to have control of how many emails and messages are unread in his mailbox. This can help to improve productivity, as it prevents the user to check periodically and get ditracted with the websites.
+
+The app creates an icon at the SystemTray and display the count of the mailbox from both services: Facebook and Gmail. Also, it allows to update instantly or in variable interval.
+
+Used Packages:
+PyGOBject(GTK3), Web.py, Facepy. All are available on PIP.
+
+Changelog:
+1.0 First commit
+2.0 Upgraded support to Facebook (OAuth method) and improved security issues.
