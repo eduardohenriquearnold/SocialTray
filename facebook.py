@@ -4,6 +4,7 @@
 import facepy
 import web, requests
 import subprocess, threading
+import os
 
 def getAuthToken():
         '''Get client token by Client Authentication and Authorization'''
@@ -15,7 +16,8 @@ def getAuthToken():
         url = ('/', 'index')
         
         global token
-                        
+        
+        #Webpy Handler Class                
         class index:
             def GET(self):
                 user_data = web.input(code=None)
@@ -44,12 +46,14 @@ def getAuthToken():
 
                     access_token = params['access_token']  
                     
+                    #Get extended token
                     global token
                     token = facepy.utils.get_extended_access_token(access_token, app_id, app_secret)[0]
                     
                     app.stop()
                     return "<script>window.close();</script>"
-                    
+        
+        #Start Web.py application in new thread and open Chromium            
         app = web.application(url, locals())
         th = threading.Thread(target=app.run)
         th.start()
@@ -73,14 +77,15 @@ def getUnreadFBMessages(token):
 
 def getUnreadMessages():
         '''Generates all login/token flux and gives back the message count.'''
-        
-        f = open('token', 'r')
+
+        path = os.path.dirname(os.path.realpath(__file__))        
+        f = open(os.path.realpath(path+'/token'), 'r')
         token = f.readline()
         f.close()
         
         try:
                 n = getUnreadFBMessages(token)
-                return n
+                return int(n)
         except:
                 token = getAuthToken()
                 print(token)
@@ -89,4 +94,4 @@ def getUnreadMessages():
                 f.write(str(token))
                 f.close()
                 
-                return None
+                return -1
