@@ -9,8 +9,8 @@ import os
 def getAuthToken():
         '''Get client token by Client Authentication and Authorization'''
     
-        app_id = ''
-        app_secret = ''
+        app_id = '714940868529499'
+        app_secret = '33bcfb01cdac919fe96266c762d5e16b'
 
         post_login_url = "http://0.0.0.0:8080/"
         url = ('/', 'index')
@@ -58,7 +58,7 @@ def getAuthToken():
         th = threading.Thread(target=app.run)
         th.start()
         
-        subprocess.Popen(['chromium', post_login_url])    
+        subprocess.Popen(['xdg-open', post_login_url])    
         th.join()
         
         return token
@@ -79,7 +79,7 @@ def getUnreadMessages():
         '''Generates all login/token flux and gives back the message count.'''
 
         path = os.path.dirname(os.path.realpath(__file__))        
-        f = open(os.path.realpath(path+'/token'), 'r')
+        f = open(os.path.realpath(path+'/token.cfg'), 'r')
         token = f.readline()
         f.close()
         
@@ -90,7 +90,7 @@ def getUnreadMessages():
                 token = getAuthToken()
                 print(token)
 
-                f = open('token', 'w')
+                f = open('token.cfg', 'w')
                 f.write(str(token))
                 f.close()
                 

@@ -96,7 +96,7 @@ class SocialTray(SocialInfo):
 		menu.popup(None, None, gtk.status_icon_position_menu, event_button, event_time, self.statusicon)
 
         def menu_click_new_tab(self, menu, link):
-                subprocess.Popen(['chromium', link])
+                subprocess.Popen(['xdg-open', 'http://'+link])
 
         def menu_click_update(self, menu):
                 self.countGmail()
