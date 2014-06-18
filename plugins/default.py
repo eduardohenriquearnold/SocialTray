@@ -1,5 +1,12 @@
-#python2
-from .. import ConfigParserEnc
+import os
+
+##############################
+#add parent folder to library
+parentdir = os.path.abspath(__file__ + "/../../")
+os.sys.path.insert(0,parentdir) 
+##############################
+
+from ConfigParserEnc import ConfigParserEnc
 
 class plugin:
         """Implements a plugin for SocialTray"""
@@ -10,9 +17,8 @@ class plugin:
                 self.icon = ''
                      
                 #Load Configuration
-                path = os.path.dirname(os.path.realpath(__file__))
-                self.config = ConfigParser.RawConfigParser()
-                self.config.read(os.path.realpath(path+'/tray.cfg'))
+                self.config = ConfigParserEnc()
+                self.config.read('tray.cfg')
                 
                 #Load particular information        
                 self.loadConf()

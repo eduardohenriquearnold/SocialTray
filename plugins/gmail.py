@@ -1,8 +1,8 @@
 #python2
 # -*- coding: utf-8 -*-
 
+from default import plugin
 import imaplib
-import plugin from default
 
 class gmail(plugin):
 
@@ -12,8 +12,8 @@ class gmail(plugin):
                 self.icon = 'gmail'
                 
                 #Get user and password info                
-                self.usr = config.get('gmail','username')
-                self.psw = config.get('gmail','password') 
+                self.usr = self.config.get('gmail','username')
+                self.psw = self.config.get('gmail','password') 
                                                                
         def getUnreadCount(self):
                 '''Get the quantity of unread messages in Inbox of a Gmail Account'''
