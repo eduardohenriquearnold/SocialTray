@@ -1,6 +1,3 @@
-#python2
-# -*- coding: latin-1 -*-
-
 from default import plugin
 
 import facepy
@@ -20,18 +17,20 @@ class facebook(plugin):
                 self.app_id = self.config.get('facebook','app_id')
                 self.app_secret = self.config.get('facebook','app_secret')
                 
-                #Try to load token, if it is not recognized, generate a token and write to config file
+                #Try to load token and use it. If it does not exist or is not recognized, generate a new one and write to config file
                 try:
                         self.token = self.config.get('facebook','token')
+                        self.graph = facepy.GraphAPI(self.token)
+                        self.graph.fql('') 
                 except:
                         self.getAuthToken()
                         self.config.set('facebook','token', self.token)
+                        self.graph = facepy.GraphAPI(self.token)
                         
         def getUnreadCount(self):                      
                 query = 'SELECT unread_count FROM mailbox_folder WHERE folder_id=0'
-                
-                graph = facepy.GraphAPI(self.token)
-                result = graph.fql(query)        
+                                                           
+                result = self.graph.fql(query)        
                 count = result['data'][0]['unread_count']
 
                 return count
@@ -85,7 +84,7 @@ class facebook(plugin):
                                         app.stop()
                                         return "<script>window.close();</script>"
                 
-                #Start Web.py application in new thread and open Chromium            
+                #Start Web.py application in new thread and open Browser            
                 app = web.application(url, locals())
                 th = threading.Thread(target=app.run)
                 th.start()
