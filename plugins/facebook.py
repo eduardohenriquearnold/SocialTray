@@ -1,12 +1,9 @@
-from default import plugin
-
 import facepy
 import web, requests
 import subprocess, threading
+import defaultPlugin
 
-#Solution for when internet is disabled (main process)
-
-class facebook(plugin):
+class plugin(defaultPlugin.plugin):
         '''Facebook plugin class'''
         
         def loadConf(self):

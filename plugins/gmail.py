@@ -1,10 +1,7 @@
-#python2
-# -*- coding: utf-8 -*-
-
-from default import plugin
 import imaplib
+import defaultPlugin
 
-class gmail(plugin):
+class plugin(defaultPlugin.plugin):
 
         def loadConf(self):
                 #Define name and icon

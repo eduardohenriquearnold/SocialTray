@@ -1,13 +1,10 @@
 #python2
-#Author: Eduardo Henrique Arnold (eduardoarnoldh@gmail.com)
 
-import ConfigParser
-import os, subprocess
 import gtk
+import ConfigParserEnc
 
+import os, subprocess
 import timer
-import gmail
-import facebook
 
 class SocialInfo:
         '''Implements data gathering from services'''
@@ -54,18 +51,31 @@ class SocialInfo:
                 print('UPDATE: gmail={0} face={1}'.format(self.gCount, self.fCount))
 
 
-class SocialTray(SocialInfo):
+class SocialTray:
         '''Creates app with icon in notification area and display information about services'''
 
         def __init__(self):
-                SocialInfo.__init__(self)
+                
+                #load configuration
+                self.config = ConfigParserEnc.ConfigParserEnc()
+                self.config.read('tray.cfg')
+                self.interval = float(self.config.read('tray','interval'))*60
+                
+                #import plugins 
+                self.plugins = []
+                
 
-                self.statusicon = gtk.StatusIcon()
-                self.set_icon('default')
-
-                #self.statusicon.connect("activate", self.click_event)
-                self.statusicon.connect('popup-menu', self.on_right_click)
+                #set icon and actions
+                self.statusicon = gtk.StatusIcon()                
+                self.set_icon('default')  
                 self.statusicon.set_tooltip("Social Tray")
+                                                              
+                self.statusicon.connect('popup-menu', self.on_right_click)                                             
+                
+        def create_menu(self):
+                menu = gtk.Menu()
+                
+                
 
         def on_right_click(self, icon, event_button, event_time):
                 self.set_icon('default')
@@ -111,6 +121,7 @@ class SocialTray(SocialInfo):
                 self.statusicon.set_from_icon_name(iname)
 
         def update(self, gCount=None, fCount=None):
+                #Solution for when internet is disabled (main process)
                 if gCount != None:
                         if self.gCount != gCount and gCount > 0:
                                 self.set_icon('red')
