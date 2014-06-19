@@ -12,20 +12,20 @@ class ConfigParserEnc(RawConfigParser):
                 RawConfigParser.read(self, self.fPath)
         
         def get(self, section, option):
-                a = RawConfigParser.get(self, section, option)                
-
-                #Try to decode
-                try:
-                        dec = b64decode(a)
-                except TypeError:
-                        #Could not decode, so must be the original string -> Encode and write to file
+                a = RawConfigParser.get(self, section, option) 
+                               
+                #Check if encoded
+                if (a[0] == ':'):
+                        dec = b64decode(a[1:])
+                        return dec 
+                else:
+                        #Is the original string -> Encode and write to file
                         self.set(section, option, a)
-                        return a
-                        
-                return dec                                
+                        return a                                                                       
                         
         def set(self, section, option, value):
-                nv = b64encode(value)
+                #The new value contains : in the beginning to indicate it's encoded
+                nv = ':'+b64encode(value)
                 RawConfigParser.set(self, section, option, nv)
                 
                 self.write(open(self.fPath, 'wb'))

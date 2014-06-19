@@ -1,5 +1,5 @@
 #python2
-#coding=utf-8
+# -*- coding: latin-1 -*-
 
 from default import plugin
 
@@ -45,43 +45,45 @@ class facebook(plugin):
 
                 post_login_url = "http://0.0.0.0:8080/"
                 url = ('/', 'index')
-                
+
                 parentSelf = self
                                 
                 #Webpy Handler Class                
                 class index:
-                    def GET(self):
-                        user_data = web.input(code=None)
-                        code = user_data.code
+                        def GET(self):
+                                user_data = web.input(code=None)
+                                code = user_data.code
 
-                        if not code:
-                            dialog_url = ( "http://www.facebook.com/dialog/oauth?" +
-                                           "client_id=" + parentSelf.app_id +
-                                           "&redirect_uri=" + post_login_url +
-                                           "&scope=read_mailbox" )
+                                if not code:
+                                        dialog_url = ( "http://www.facebook.com/dialog/oauth?" +
+                                                   "client_id=" + parentSelf.app_id +
+                                                   "&redirect_uri=" + post_login_url +
+                                                   "&scope=read_mailbox" )
 
-                            return "<script>top.location.href='" + dialog_url + "'</script>"
-                        else:
-                            token_url = ( "https://graph.facebook.com/oauth/access_token?" +
-                                          "client_id=" + parentSelf.app_id +
-                                          "&redirect_uri=" + post_login_url +
-                                          "&client_secret=" + parentSelf.app_secret +
-                                          "&code=" + code )
-                            response = requests.get(token_url).content
+                                        return "<script>top.location.href='" + dialog_url + "'</script>"
+                                else:
+                                        print(parentSelf.app_secret)
+                                        print(parentSelf.app_id)
+                                        token_url = ( "https://graph.facebook.com/oauth/access_token?" +
+                                                  "client_id=" + parentSelf.app_id +
+                                                  "&redirect_uri=" + post_login_url +
+                                                  "&client_secret=" + parentSelf.app_secret +
+                                                  "&code=" + code )
+                                        response = requests.get(token_url).content
 
-                            params = {}
-                            result = response.split("&", 1)
-                            for p in result:
-                                (k,v) = p.split("=")
-                                params[k] = v
+                                        params = {}
+                                        result = response.split("&", 1)
+                                        for p in result:
+                                                (k,v) = p.split("=")
+                                                params[k] = v
 
-                            access_token = params['access_token']  
-                            
-                            #Get extended token and write to parent class
-                            parentSelf.token = facepy.utils.get_extended_access_token(access_token, parentSelf.app_id, parentSelf.app_secret)[0]
-                            
-                            app.stop()
-                            return "<script>window.close();</script>"
+                                        access_token = params['access_token']  
+
+                                        #Get extended token and write to parent class
+                                        parentSelf.token = facepy.utils.get_extended_access_token(access_token, parentSelf.app_id, parentSelf.app_secret)[0]
+
+                                        app.stop()
+                                        return "<script>window.close();</script>"
                 
                 #Start Web.py application in new thread and open Chromium            
                 app = web.application(url, locals())
