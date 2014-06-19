@@ -17,7 +17,7 @@ class ConfigParserEnc(RawConfigParser):
                 #Try to decode
                 try:
                         dec = b64decode(a)
-                except Exception:
+                except TypeError:
                         #Could not decode, so must be the original string -> Encode and write to file
                         self.set(section, option, a)
                         return a
