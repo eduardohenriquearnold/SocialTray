@@ -1,5 +1,5 @@
 #python2
-# -*- coding: utf-8 -*-
+#coding=utf-8
 
 from default import plugin
 
@@ -16,13 +16,15 @@ class facebook(plugin):
                 self.name = 'Facebook'
                 self.icon = 'facebook'
                 
+                #Get app_id and app_secret from config file
                 self.app_id = self.config.get('facebook','app_id')
                 self.app_secret = self.config.get('facebook','app_secret')
                 
+                #Try to load token, if it is not recognized, generate a token and write to config file
                 try:
                         self.token = self.config.get('facebook','token')
                 except:
-                        self.token = self.getAuthToken()
+                        self.getAuthToken()
                         self.config.set('facebook','token', self.token)
                         
         def getUnreadCount(self):                      
@@ -44,8 +46,8 @@ class facebook(plugin):
                 post_login_url = "http://0.0.0.0:8080/"
                 url = ('/', 'index')
                 
-                global token
-                
+                parentSelf = self
+                                
                 #Webpy Handler Class                
                 class index:
                     def GET(self):
@@ -54,16 +56,16 @@ class facebook(plugin):
 
                         if not code:
                             dialog_url = ( "http://www.facebook.com/dialog/oauth?" +
-                                           "client_id=" + self.app_id +
+                                           "client_id=" + parentSelf.app_id +
                                            "&redirect_uri=" + post_login_url +
                                            "&scope=read_mailbox" )
 
                             return "<script>top.location.href='" + dialog_url + "'</script>"
                         else:
                             token_url = ( "https://graph.facebook.com/oauth/access_token?" +
-                                          "client_id=" + self.app_id +
+                                          "client_id=" + parentSelf.app_id +
                                           "&redirect_uri=" + post_login_url +
-                                          "&client_secret=" + self.app_secret +
+                                          "&client_secret=" + parentSelf.app_secret +
                                           "&code=" + code )
                             response = requests.get(token_url).content
 
@@ -75,9 +77,8 @@ class facebook(plugin):
 
                             access_token = params['access_token']  
                             
-                            #Get extended token
-                            global token
-                            token = facepy.utils.get_extended_access_token(access_token, self.app_id, self.app_secret)[0]
+                            #Get extended token and write to parent class
+                            parentSelf.token = facepy.utils.get_extended_access_token(access_token, parentSelf.app_id, parentSelf.app_secret)[0]
                             
                             app.stop()
                             return "<script>window.close();</script>"
@@ -89,10 +90,5 @@ class facebook(plugin):
                 
                 subprocess.Popen(['xdg-open', post_login_url])    
                 th.join()
-                
-                return token
-                               
-    
-                
-
+               
 
