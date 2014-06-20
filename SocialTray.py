@@ -59,12 +59,19 @@ class SocialTray:
                 #load configuration
                 self.config = ConfigParserEnc.ConfigParserEnc()
                 self.config.read('tray.cfg')
-                self.interval = float(self.config.read('tray','interval'))*60
+                self.interval = float(self.config.get('tray','interval'))*60
                 
                 #import plugins 
                 self.plugins = []
-                
+                pluginsFolder = os.path.realpath(os.path.dirname(__file__)+'/plugins/')
+                pluginsPath = [pluginsFolder+'/'+a for a in os.listdir(pluginsFolder) if a.endswith('py') and not a.startswith('default')]
+                print(pluginsPath)
 
+                #load class dynamically
+                #http://aleatory.clientsideweb.net/2012/04/03/how-to-introspect-dynamically-create-classes-in-python/
+                
+                #python import package: imp
+                
                 #set icon and actions
                 self.statusicon = gtk.StatusIcon()                
                 self.set_icon('default')  
