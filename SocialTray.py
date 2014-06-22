@@ -1,55 +1,11 @@
 #python2
 
 import gtk
+import imp
 import ConfigParserEnc
+import os, sys, subprocess
 
-import os, subprocess
 import timer
-
-class SocialInfo:
-        '''Implements data gathering from services'''
-
-        def __init__(self):
-                #Initial Values
-                self.gCount = self.fCount = None
-
-                #Load Configuration
-                path = os.path.dirname(os.path.realpath(__file__))
-                config = ConfigParser.RawConfigParser()
-                config.read(os.path.realpath(path+'/tray.cfg'))
-
-                self.gEn = config.get('gmail','enabled')
-                self.gInt = int(config.get('gmail','interval'))*60
-                self.gUser = config.get('gmail','username')
-                self.gPass = config.get('gmail','password')
-
-                self.fEn = config.get('facebook','enabled')
-                self.fInt = int(config.get('facebook','interval'))*60
-
-                #Start Threads
-                if self.gEn == 'true':
-                        timer.newTimer(self.countGmail, self.gInt)
-
-                if self.fEn == 'true':
-                        timer.newTimer(self.countFB, self.fInt)
-                
-        def countGmail(self):
-                gCount = int(gmail.getInboxCount(self.gUser, self.gPass))
-                self.update(gCount=gCount)
-
-        def countFB(self):     
-                fCount = int(facebook.getUnreadMessages())
-                self.update(fCount=fCount)
-
-        def update(self, gCount=None, fCount=None):
-                if gCount != None:
-                        self.gCount = gCount
-
-                if fCount != None:
-                        self.fCount = fCount
-
-                print('UPDATE: gmail={0} face={1}'.format(self.gCount, self.fCount))
-
 
 class SocialTray:
         '''Creates app with icon in notification area and display information about services'''
@@ -62,21 +18,22 @@ class SocialTray:
                 self.interval = float(self.config.get('tray','interval'))*60
                 
                 #import plugins 
-                self.plugins = []
+                self.plugins = []                
                 pluginsFolder = os.path.realpath(os.path.dirname(__file__)+'/plugins/')
-                pluginsPath = [pluginsFolder+'/'+a for a in os.listdir(pluginsFolder) if a.endswith('py') and not a.startswith('default')]
-                print(pluginsPath)
+                pluginsPath = [fname for fname in os.listdir(pluginsFolder) if fname.endswith('py')]
 
-                #load class dynamically
-                #http://aleatory.clientsideweb.net/2012/04/03/how-to-introspect-dynamically-create-classes-in-python/
-                
-                #python import package: imp
-                
+                for f in pluginsPath:
+                        name = f.split('.')[0]
+                        path = pluginsFolder+'/'+f
+                        mod = imp.load_source(name, path)  
+                        
+                        if name != 'defaultPlugin':
+                                self.plugins.append(mod.plugin())
+                                        
                 #set icon and actions
                 self.statusicon = gtk.StatusIcon()                
                 self.set_icon('default')  
-                self.statusicon.set_tooltip("Social Tray")
-                                                              
+                self.statusicon.set_tooltip("Social Tray")                                                              
                 self.statusicon.connect('popup-menu', self.on_right_click)                                             
                 
         def create_menu(self):
