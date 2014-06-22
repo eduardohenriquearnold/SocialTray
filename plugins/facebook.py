@@ -18,7 +18,7 @@ class plugin(defaultPlugin.plugin):
                 try:
                         self.token = self.config.get('facebook','token')
                         self.graph = facepy.GraphAPI(self.token)
-                        self.graph.fql('') 
+                        self.graph.fql('SELECT unread_count FROM mailbox_folder WHERE folder_id=0') 
                 except:
                         self.getAuthToken()
                         self.config.set('facebook','token', self.token)
