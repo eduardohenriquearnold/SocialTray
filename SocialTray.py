@@ -71,7 +71,7 @@ class SocialTray:
                 for p in self.plugins:
                         Item = gtk.ImageMenuItem(str(p.count)+" unread")
                         Item.connect('activate', self.menu_click_new_tab, p.link)
-                        Img = gtk.image_new_from_icon_name(p.icon, 17)
+                        Img = gtk.image_new_from_icon_name(p.icon, 12)
                         Item.set_image(Img)
                         menu.append(Item)                        				
 
