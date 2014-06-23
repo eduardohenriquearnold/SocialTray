@@ -12,9 +12,10 @@ class plugin:
         """Implements a plugin for SocialTray"""
         
         def __init__(self):   
-                #Define name and icon
+                #Define name, icon and link
                 self.name = ''
                 self.icon = ''
+                self.link = ''
                      
                 #Load Configuration
                 self.config = ConfigParserEnc()
@@ -30,6 +31,3 @@ class plugin:
         def getUnreadCount(self):                      
                 pass
                 
-        def getLink(self):
-                """Return the link opened when the menu item is clicked"""
-                pass

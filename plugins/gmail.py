@@ -4,9 +4,10 @@ import defaultPlugin
 class plugin(defaultPlugin.plugin):
 
         def loadConf(self):
-                #Define name and icon
+                #Define name, icon and link
                 self.name = 'Gmail'
                 self.icon = 'gmail'
+                self.link = 'http://gmail.com'
                 
                 #Get user and password info                
                 self.usr = self.config.get('gmail','username')
@@ -23,7 +24,7 @@ class plugin(defaultPlugin.plugin):
                 return n
                 
         def getLink(self):
-                return 'http://gmail.com'
+                return 
         
 
               

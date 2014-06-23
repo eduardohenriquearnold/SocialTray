@@ -9,6 +9,7 @@ class plugin(defaultPlugin.plugin):
         def loadConf(self):
                 self.name = 'Facebook'
                 self.icon = 'facebook'
+                self.link = 'http://facebook.com/messages/'
                 
                 #Get app_id and app_secret from config file
                 self.app_id = self.config.get('facebook','app_id')
@@ -30,11 +31,7 @@ class plugin(defaultPlugin.plugin):
                 result = self.graph.fql(query)        
                 count = result['data'][0]['unread_count']
 
-                return count
-                
-        def getLink(self):
-                return 'http://facebook.com/messages/'        
-
+                return count                       
 
         def getAuthToken(self):
                 '''Get client token by Client Authentication and Authorization'''               
