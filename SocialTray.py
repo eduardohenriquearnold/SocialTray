@@ -41,7 +41,7 @@ class SocialTray:
                 #start timer
                 self.timer = timer.newTimer(self.update, self.interval)  
                 
-        def update(self):
+        def update(self, *args):
                 #Check internet connection
                 if not self.internet_on():
                     return
