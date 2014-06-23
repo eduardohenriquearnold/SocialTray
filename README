@@ -1,8 +1,8 @@
 Social Tray
-Version 2.0
+Version 3.0
 
 Author: Eduardo Henrique Arnold
-Last update: 26 Dec 2013
+Last update: 23 June 2014
 
 The main objective of this software is to allow the user to have control of how many emails and messages are unread in his mailbox. This can help to improve productivity, as it prevents the user to check periodically and get ditracted with the websites.
 
@@ -14,3 +14,4 @@ PyGOBject(GTK3), Web.py, Facepy. All are available on PIP.
 Changelog:
 1.0 First commit
 2.0 Upgraded support to Facebook (OAuth method) and improved security issues.
+3.0 Created new interface to plugins, new configuration parameters parser with encryption for security.
